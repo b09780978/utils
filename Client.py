@@ -26,7 +26,9 @@ class AioSessionContext(dict):
 		self.update(config)
 
 class HTTPResponse(dict):
-	"""docstring for """
+	'''
+		Wrap aiohttp's response
+	'''
 	def __init__(self, **kwargs):
 		self.update(kwargs)
 
@@ -54,16 +56,13 @@ class AioSession(object):
 		if not isinstance(config, dict):
 			raise AioSessionException('Client(config) error\nconfig must a dict')
 
-		self._default_config = {
-			'headers' : None,
-			'cookies' : None
-		}
 		self._context = AioSessionContext(config)
 		self._loop = asyncio.get_event_loop() if config.get('loop', None) is None else config.get('loop')
 
-	#async def _request(self, method, url, dataType, encoding, params=None, data=None, file=None, **kwargs):
+	'''
+		Real request function
+	'''
 	async def _request(self, method, url, dataType, encoding, **kwargs):
-		print(self._context.get('headers'))
 		async with ClientSession(**self._context) as session:
 			method = method.upper()
 			request_func = None
