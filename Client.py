@@ -25,6 +25,22 @@ class AioSessionContext(dict):
 		super(AioSessionContext, self).__init__(self)
 		self.update(config)
 
+	@property
+	def headers(self):
+		return self.get('headers', None)
+
+	@headers.setter
+	def headers(self, new_headers):
+		self.setdefault('headers', new_headers)
+
+	@property
+	def cookies(self):
+		return self.get('cookies', None)
+
+	@cookies.setter
+	def cookies(self, new_cookies):
+		self.setdefault('cookies', new_cookies)
+	
 class HTTPResponse(dict):
 	'''
 		Wrap aiohttp's response
@@ -57,11 +73,11 @@ class AioSession(object):
 		if not isinstance(config, dict):
 			raise AioSessionException('Client(config) error\nconfig must a dict')
 
+		self._closed = False
 		self._loop = asyncio.get_event_loop() if config.get('loop', None) is None else config.get('loop')
 		self._connector = TCPConnector(loop=self._loop)
 		self._context = AioSessionContext(config)
 		self._context.update({'connector' : self._connector })
-		self._closed = False
 
 	async def _request(self, method, url, dataType, encoding, **kwargs):
 		'''
@@ -170,6 +186,22 @@ class AioSession(object):
 		if not self.closed:
 			await self._connector.close()
 			self._connector = None
+
+	@property
+	def headers(self):
+		return self._context.headers
+
+	@headers.setter
+	def headers(self, new_headers):
+		self._context.headers = new_headers
+
+	@property
+	def cookies(self):
+		return self._context.cookies
+
+	@cookies.setter
+	def cookies(self, new_cookies):
+		self._context.cookies = new_cookies
 
 	@property
 	def closed(self):
