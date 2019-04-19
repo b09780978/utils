@@ -106,7 +106,8 @@ class AioSession(object):
 				result = await resp.read()
 			else:
 				raise AioSessionException('Unknow request data type: {}'.format(dataType))
-				self._context.update( { 'headers' : session._default_headers, 'cookies' : session._cookie_jar } )
+			
+			self._context.update( { 'headers' : session._default_headers, 'cookies' : session._cookie_jar } )
 			response = HTTPResponse(data=result, url=resp.url, status=resp.status, history=resp.history)
 			return response
 
