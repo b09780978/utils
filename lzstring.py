@@ -67,7 +67,6 @@ class LZW_CDATA(list):
     def text(self):
         return str(self)
 
-# TODO
 class LZW_DDICT(LZW_CDICT):
     def __init__(self, word_bits : int=2, capacity : int=2, size : int=2):
         super(LZW_DDICT, self).__init__(word_bits, capacity, size)
@@ -284,7 +283,6 @@ def _compress(data : str='', char_size : int=16, getChr=chr) -> str:
 def _decompress(getValue, length : int=0, char_size : int=16) -> str:
     if length == 0:  return ''
 
-    #lzw_dict = LZW_DDICT(3, 4, 2)
     lzw_dict = LZW_DDICT(2, 2, 2)
     result = LZW_DDATA(getValue, length, char_size)
     s = ''
